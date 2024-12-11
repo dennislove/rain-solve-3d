@@ -76,7 +76,7 @@ const Control = ({ onCommandChange, rainSettings, setRainSettings }) => {
         Tốc độ rơi (m/s)
         <input
           type="number"
-          step="1"
+          step="0.1"
           value={rainSettings.fallSpeed}
           onChange={handleFallSpeed}
         />
@@ -96,7 +96,7 @@ const Control = ({ onCommandChange, rainSettings, setRainSettings }) => {
           <option value="idle">idle</option>
           <option value="walk">walk</option>
           <option value="run">run</option>
-          <option value="fall">fall</option>
+          <option value="pray">pray</option>
         </select>
       </label>
     </div>

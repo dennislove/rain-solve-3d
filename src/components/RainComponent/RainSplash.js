@@ -9,12 +9,22 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
   // Generate random initial positions for the raindrops
   const initialPositions = useMemo(() => {
     const positions = [];
+
     for (let i = 0; i < rainSettings.rainIntensity; i++) {
-      positions.push({
-        x: (Math.random() - 0.3) * 300,
-        y: Math.random() * 200,
-        z: (Math.random() - 0.5) * 250
-      });
+      const maxRadius = 120; // Bán kính của hình trụ
+      const height = 300; // Chiều cao của hình trụ
+      const heightMax = 300; // Chiều cao của hình trụ
+
+      // Tọa độ hình trụ
+      const radius = Math.sqrt(Math.random()) * maxRadius;
+      const theta = Math.random() * Math.PI * 2; // Góc ngẫu nhiên (0 đến 360 độ)
+      const y = Math.random() * height; // Chiều cao ngẫu nhiên
+      const x = radius * Math.cos(theta); // Tọa độ X
+      const z = radius * Math.sin(theta); // Tọa độ Z
+
+      if (radius <= maxRadius && y >= 0 && y <= heightMax) {
+        positions.push({ x, y, z });
+      }
     }
     return positions;
   }, [rainSettings.rainIntensity]);
@@ -27,14 +37,14 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
         position.y -= rainSettings.fallSpeed; // Move the raindrop down
         //position.z += crossFallTan * fallSpeed;
         if (position.y < 0) {
-          position.y = 200;
+          position.y = 120;
           // position.z = (Math.random() - 0.3) * 300;
         } // Reset position if below ground
 
         // Update the dummy object's position
         dummy.position.set(position.x, position.y, position.z);
         // dummy.rotation.set(Math.PI / 2, 0, 0); //-90 độ
-        dummy.scale.set(0.5, 0.7, 0.5); // scale
+        dummy.scale.set(0.5, 1.2, 0.5); // scale
         dummy.updateMatrix();
 
         // Apply the updated matrix to the instance
@@ -47,17 +57,19 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
 
   return (
     <Suspense fallback={null}>
-      <instancedMesh
-        ref={instancedMeshRef}
-        args={[
-          gltf.scene.children[0].geometry,
-          gltf.scene.children[0].material,
-          rainSettings.rainIntensity
-        ]}
-      >
-        {/* Optionally customize the material */}
-        <meshBasicMaterial color="white" />
-      </instancedMesh>
+      <group rotation={[Math.PI / 60, 0, -50]}>
+        <instancedMesh
+          ref={instancedMeshRef}
+          args={[
+            gltf.scene.children[0].geometry,
+            gltf.scene.children[0].material,
+            rainSettings.rainIntensity
+          ]}
+        >
+          {/* Optionally customize the material */}
+          <meshBasicMaterial color="white" />
+        </instancedMesh>
+      </group>
     </Suspense>
   );
 };

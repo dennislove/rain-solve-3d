@@ -1,4 +1,5 @@
 import React from 'react';
+import Notification from '../Notification';
 
 const Beginer = ({ handleStart, isLoading }) => {
   return (
@@ -6,17 +7,35 @@ const Beginer = ({ handleStart, isLoading }) => {
       onClick={handleStart}
       style={{
         position: 'absolute',
+        backgroundColor: '#ffffff50',
         width: '100vw',
         height: '100vh',
-        backgroundColor: 'white',
-        display: 'flex',
-        justifyContent: 'center',
+        top: '0',
         cursor: 'pointer',
-        alignItems: 'center',
         zIndex: isLoading ? 20 : -1
       }}
     >
-      <h2>Click anywhere to start</h2>
+      <div
+        style={{
+          position: 'absolute',
+          width: '100vw',
+          height: '30vh',
+          backgroundColor: 'white',
+          top: '30%'
+        }}
+      >
+        <img
+          style={{
+            width: '30%',
+            top: '-100%',
+            position: 'absolute'
+          }}
+          src="/icon/image_removepics.png"
+          alt=""
+        />
+
+        <Notification />
+      </div>
     </div>
   );
 };

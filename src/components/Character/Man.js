@@ -10,8 +10,20 @@ export default function Man({ command, setCommand }) {
   const [mixer, setMixer] = useState(null);
   const [animationsLoaded, setAnimationsLoaded] = useState(false);
   const [targetZ, setTargetZ] = useState(null);
-  const [startZ, setStartZ] = useState(null);
+  const [targetX, setTargetX] = useState(null);
+  const [targetY, setTargetY] = useState(null);
+  const [startX, setStartX] = useState(null);
   const { gl } = useThree();
+  // const { command, setCommand } = useState();
+  // const rainQuantity = rainSettings.rainIntensity;
+  // console.log(rainQuantity);
+  // if (rainQuantity > 0 && rainQuantity <= 1000) {
+  //   command = 'walk';
+  // } else if (rainQuantity > 1000 && rainQuantity < 5000) {
+  //   command = 'run';
+  // } else {
+  //   command = 'idle';
+  // }
 
   useEffect(() => {
     gl.shadowMap.enabled = true;
@@ -46,6 +58,9 @@ export default function Man({ command, setCommand }) {
         }),
         loader.load('/models/man/run.fbx', (object) => {
           newAnimations.run = object.animations[0];
+        }),
+        loader.load('/models/man/Praying.fbx', (object) => {
+          newAnimations.pray = object.animations[0];
         })
       ]);
 
@@ -63,13 +78,14 @@ export default function Man({ command, setCommand }) {
     }
 
     if (man) {
-      setStartZ(man.position.z);
+      setStartX(man.position.x);
 
       // Define target positions for walk and run
       if (command === 'walk') {
-        setTargetZ(man.position.z + 20); // Walk moves 20 units forward
+        setTargetX(man.position.x + 20);
+        // setTargetX(man.position.x + 20);
       } else if (command === 'run') {
-        setTargetZ(man.position.z + 30); // Run moves 30 units forward
+        setTargetX(man.position.x + 30); // Run moves 30 units forward
       }
     }
   }, [command, animations, mixer, man]);
@@ -84,12 +100,12 @@ export default function Man({ command, setCommand }) {
   useFrame(() => {
     if (mixer) mixer.update(0.02);
 
-    if (man && targetZ !== null) {
+    if (man && targetX !== null) {
       // Incrementally move the model towards the target position
-      if (man.position.z < targetZ) {
-        man.position.z += command === 'run' ? 0.5 : 0.3; // Adjust speed based on command
+      if (man.position.x < targetX) {
+        man.position.x += command === 'run' ? 0.5 : 0.4; // Adjust speed based on command
       } else {
-        setTargetZ(null); // Clear target when reached
+        setTargetX(null); // Clear target when reached
 
         // Reset to idle animation once movement is complete
         if (command !== 'idle') {
@@ -100,12 +116,12 @@ export default function Man({ command, setCommand }) {
   });
 
   if (!man) return null;
-
+  man.rotation.y = 90 * (Math.PI / 180);
   return (
     <>
       <ambientLight intensity={0.35} />
       <directionalLight castShadow position={[0, 10, 10]} />
-      <primitive object={man} scale={0.1} position={[15, 0, -50]} />
+      <primitive object={man} scale={0.09} position={[-50, 0, 65]} />
     </>
   );
 }
