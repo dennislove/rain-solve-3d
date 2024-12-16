@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { handleValueChange } from '../../utils/handleValue';
-const Control = ({ onCommandChange, rainSettings, setRainSettings }) => {
+const Control = ({ rainSettings, setRainSettings, toggle }) => {
   let diameter;
 
   const windSpeedInMeters = rainSettings.windSpeed * 0.27778;
@@ -42,11 +42,6 @@ const Control = ({ onCommandChange, rainSettings, setRainSettings }) => {
   );
   const handleFallSpeed = handleValueChange(setRainSettings, 'fallSpeed');
   const handleSpeedWindChange = handleValueChange(setRainSettings, 'windSpeed');
-
-  const handleSetCommand = (event) => {
-    const newCommand = event.target.value;
-    onCommandChange(newCommand); // Call the parent's handler
-  };
 
   return (
     <div
@@ -90,15 +85,7 @@ const Control = ({ onCommandChange, rainSettings, setRainSettings }) => {
           onChange={handleSpeedWindChange}
         />
       </label>
-      <label>
-        Trạng thái
-        <select name="animations" id="animations" onChange={handleSetCommand}>
-          <option value="idle">idle</option>
-          <option value="walk">walk</option>
-          <option value="run">run</option>
-          <option value="pray">pray</option>
-        </select>
-      </label>
+      <button onClick={toggle}>Ngập úng</button>
     </div>
   );
 };

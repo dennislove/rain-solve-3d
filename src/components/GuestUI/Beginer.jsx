@@ -7,7 +7,8 @@ const Beginer = ({ handleStart, isLoading }) => {
       onClick={handleStart}
       style={{
         position: 'absolute',
-        backgroundColor: '#ffffff50',
+        backgroundImage: 'url("/rain.jpg")',
+        backgroundSize: 'cover',
         width: '100vw',
         height: '100vh',
         top: '0',
@@ -24,16 +25,6 @@ const Beginer = ({ handleStart, isLoading }) => {
           top: '30%'
         }}
       >
-        <img
-          style={{
-            width: '30%',
-            top: '-100%',
-            position: 'absolute'
-          }}
-          src="/icon/image_removepics.png"
-          alt=""
-        />
-
         <Notification />
       </div>
     </div>

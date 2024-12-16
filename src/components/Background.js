@@ -13,13 +13,13 @@ export default function Background() {
       if (child.isMesh) {
         child.castShadow = false; // Prevent background from casting shadows
         child.receiveShadow = true; // Enable background to receive shadows
-        child.material.transparent = true; // Allow blending
+        // child.material.transparent = true; // Allow blending
       }
     });
   }, [bg, animations]);
 
   // Set render order lower than other objects, so background renders first
-  bg.scene.renderOrder = -1;
+  bg.scene.renderOrder = 0;
 
   return <primitive object={bg.scene} scale={4} position={[0, -5, 10]} />;
 }

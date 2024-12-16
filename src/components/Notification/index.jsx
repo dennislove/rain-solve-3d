@@ -5,9 +5,20 @@ const Notification = () => {
     <div
       className="animate__animated animate__fadeInUp"
       style={{
-        backgroundColor: 'red'
+        position: 'relative'
       }}
     >
+      <img
+        style={{
+          width: '20%',
+          top: '-90%',
+          left: '20%',
+          zIndex: '-1',
+          position: 'absolute'
+        }}
+        src="/icon/image_removepics.png"
+        alt=""
+      />
       <h1
         style={{
           textAlign: 'center',
@@ -17,10 +28,9 @@ const Notification = () => {
           marginTop: '40px'
         }}
       >
-        Em có nghe,
-        <br /> mùa thu mưa giăng lá đổ?
+        Bạn có từng nghĩ,
+        <br /> mưa lớn sẽ ra sao, mưa nhỏ sẽ như nào chưa?
       </h1>
-      <audio src="/sounds/muathuachoem.mp3" autoPlay loop controls></audio>
     </div>
   );
 };

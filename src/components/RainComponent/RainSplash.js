@@ -7,10 +7,11 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
   const gltf = useLoader(GLTFLoader, '/models/raindot.glb');
 
   // Generate random initial positions for the raindrops
+  const rainQuantity = rainSettings.rainIntensity;
   const initialPositions = useMemo(() => {
     const positions = [];
 
-    for (let i = 0; i < rainSettings.rainIntensity; i++) {
+    for (let i = 0; i < rainQuantity; i++) {
       const maxRadius = 120; // Bán kính của hình trụ
       const height = 300; // Chiều cao của hình trụ
       const heightMax = 300; // Chiều cao của hình trụ
@@ -27,7 +28,21 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
       }
     }
     return positions;
-  }, [rainSettings.rainIntensity]);
+  }, [rainQuantity]);
+
+  let rainWidth;
+  let rainHeigh;
+
+  if (rainQuantity > 0 && rainQuantity <= 2000) {
+    rainWidth = 0.2;
+    rainHeigh = 1;
+  } else if (rainQuantity > 2000 && rainQuantity <= 5000) {
+    rainWidth = 0.3;
+    rainHeigh = 1.3;
+  } else {
+    rainWidth = 1;
+    rainHeigh = 1.4;
+  }
 
   useFrame(() => {
     if (instancedMeshRef.current) {
@@ -37,14 +52,13 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
         position.y -= rainSettings.fallSpeed; // Move the raindrop down
         //position.z += crossFallTan * fallSpeed;
         if (position.y < 0) {
-          position.y = 120;
-          // position.z = (Math.random() - 0.3) * 300;
+          position.y = 180;
         } // Reset position if below ground
 
         // Update the dummy object's position
         dummy.position.set(position.x, position.y, position.z);
         // dummy.rotation.set(Math.PI / 2, 0, 0); //-90 độ
-        dummy.scale.set(0.5, 1.2, 0.5); // scale
+        dummy.scale.set(rainWidth, rainHeigh, rainWidth); // scale
         dummy.updateMatrix();
 
         // Apply the updated matrix to the instance
@@ -57,13 +71,13 @@ const RainSplash = ({ crossFall = 0, rainSettings }) => {
 
   return (
     <Suspense fallback={null}>
-      <group rotation={[Math.PI / 60, 0, -50]}>
+      <group rotation={[Math.PI / 90, 0, -50]} position={[0, -28, 0]}>
         <instancedMesh
           ref={instancedMeshRef}
           args={[
             gltf.scene.children[0].geometry,
             gltf.scene.children[0].material,
-            rainSettings.rainIntensity
+            rainQuantity
           ]}
         >
           {/* Optionally customize the material */}

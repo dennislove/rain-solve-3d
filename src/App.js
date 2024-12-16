@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
@@ -9,6 +9,9 @@ import Beginer from './components/GuestUI/Beginer';
 import RainSplash from './components/RainComponent/RainSplash';
 import Sound from './components/Sound';
 import Tree from './components/Tree';
+import Water from './components/Water';
+import LeafFly from './LeafFly';
+import Leaves from './LeafFly/Leaves';
 
 function App() {
   const [rainSettings, setRainSettings] = useState({
@@ -20,11 +23,18 @@ function App() {
   const handleStart = () => {
     setIsLoading(false);
   };
-
-  const [command, setCommand] = useState('');
-  const handleCommandChange = (newCommand) => {
-    setCommand(newCommand);
+  const [toggle, setToggle] = useState(false);
+  const handleToggle = () => {
+    setToggle(!toggle);
   };
+  const leaves = Array.from({ length: 20 }, (_, i) => ({
+    position: [
+      Math.random() * 120 - 85, // Random X position
+      Math.random() * 110 - 25, // Random Y position
+      Math.random() * 180 - 55 // Random Z position
+    ],
+    key: i // Unique key for React
+  }));
 
   return (
     <div
@@ -56,9 +66,19 @@ function App() {
           shadow-camera-bottom={-100}
         />
 
-        <Man command={command} setCommand={handleCommandChange} />
+        <Man rainSettings={rainSettings} />
+
         <Background />
+        {toggle && <Water />}
+
         <Tree />
+
+        {leaves.map(({ position, key }) => (
+          <LeafFly key={key} position={position} />
+        ))}
+        {leaves.map(({ position, key }) => (
+          <Leaves key={key} position={position} />
+        ))}
 
         <RainSplash rainSettings={rainSettings} />
 
@@ -77,9 +97,9 @@ function App() {
       </Canvas>
       {/* Control component để điều chỉnh cài đặt mưa */}
       <Control
-        onCommandChange={handleCommandChange}
         rainSettings={rainSettings}
         setRainSettings={setRainSettings}
+        toggle={handleToggle}
       />
 
       {/* thêm các component để mô tả các sự kiện click */}
